@@ -54,11 +54,11 @@ if __name__ == "__main__":
     from sklearn.datasets import make_blobs
     import matplotlib.pyplot as plt
 
-    #Przykładowy zbiór testowy z sklearn.dataset
-    X, _ = make_blobs(n_samples=100, centers=3, random_state=42)
+    # przykładowy zbiór testowy z sklearn.dataset
+    X, _ = make_blobs(n_samples=100, centers=3, random_state=37)
 
-    #Tutaj sobie klasteryzujemy
-    dbscan = DBSCAN(eps=2, min_pts=5) # tutaj podajemy parametry eps i min_pts
+    # tutaj sobie klasteryzujemy
+    dbscan = DBSCAN(eps=1, min_pts=5) # tutaj podajemy parametry eps i min_pts
     dbscan.clusterize(X)
 
     # wizualizacja klastrów
