@@ -1,77 +1,67 @@
 import numpy as np
 
 class DBSCAN:
-    def __init__(self, eps, min_samples):
-        self.eps= eps  # Maksymalna odległość do sąsiednich punktów
-        self.min_samples = min_samples  # Minimalna liczba punktów w sąsiedztwie do utworzenia klastra
+    def __init__(self, eps, min_pts):
+        self.eps = eps  # maksymalny promień sąsiedztwa
+        self.min_pts = min_pts  # minimalna liczba obiektów wchodząca w skład klastra
         self.labels_ = None  # Przechowuje etykiety klastrów
 
-    def fit(self, X):
+    def clusterize(self, X):
         n_points = len(X)
-        self.labels_ = np.full(n_points, -1)  # Inicjalizacja etykiet wszystkich punktów na -1 (oznacza szum)
+        self.labels_ = np.full(n_points, -1)  # inicjalizacja etykiet wszystkich punktów na -1 (szum)
         cluster_id = 0
 
         for i in range(n_points):
-            if self.labels_[i] != -1:  # Jeśli punkt już został przypisany do klastra
+            if self.labels_[i] != -1:  # pomijamy, jeżeli punkt już został przypisany do klastra
                 continue
 
-            # Znajdź wszystkie punkty sąsiadujące z X[i]
-            neighbors = self._region_query(X, i)
+            neighbors = self._find_neighbors(X, i) # szukamy sąsiadów X[i]
 
-            if len(neighbors) < self.min_samples:
-                # Jeśli liczba sąsiadów jest mniejsza niż min_samples, oznacz punkt jako szum (etykieta -1)
+            if len(neighbors) < self.min_pts: # jeśli liczba sąsiadów jest mniejsza niż min_pts, oznacz punkt jako szum
                 self.labels_[i] = -1
-            else:
-                # W przeciwnym razie rozpocznij nowy klaster
+            else: # w przeciwnym razie rozpocznij nowy klaster
                 self._expand_cluster(X, i, neighbors, cluster_id)
                 cluster_id += 1
 
-    def _expand_cluster(self, X, point_idx, neighbors, cluster_id):
-        """ Rozwiń nowy klaster, przypisując wszystkie punkty do klastra """
+    def _expand_cluster(self, X, point_idx, neighbors, cluster_id): #przypisuje wszystkie punkty do klastra
         self.labels_[point_idx] = cluster_id  # Przypisz punkt do klastra
         i = 0
 
         while i < len(neighbors):
             neighbor_idx = neighbors[i]
 
-            if self.labels_[neighbor_idx] == -1:
-                # Jeśli sąsiad był oznaczony jako szum, przypisz go do klastra
+            if self.labels_[neighbor_idx] == -1: # jeżeli punkt nie był jeszcze przypisany, przypisujemy do klastra
                 self.labels_[neighbor_idx] = cluster_id
-            elif self.labels_[neighbor_idx] != -1:
-                # Jeśli sąsiad jest już przypisany do klastra, przejdź do następnego
+            else: # w przeciwnym przypadku, przejdź do następnego
                 i += 1
                 continue
 
-            # Znajdź nowych sąsiadów tego sąsiada
-            new_neighbors = self._region_query(X, neighbor_idx)
+            new_neighbors = self._find_neighbors(X, neighbor_idx) # szukamy nowych sąsiadów tego sąsiada
 
-            if len(new_neighbors) >= self.min_samples:
-                # Dodaj nowych sąsiadów do listy sąsiadów
+            if len(new_neighbors) >= self.min_pts: # dodajemy nowych sąsiadów do listy sąsiadów
                 neighbors = neighbors + new_neighbors
 
             i += 1
 
-    def _region_query(self, X, point_idx):
-        """ Zwróć listę sąsiadów danego punktu """
+    def _find_neighbors(self, X, point_idx): # zwraca listę sąsiadów danego punktu
         neighbors = []
         for i, point in enumerate(X):
             if np.linalg.norm(X[point_idx] - point) < self.eps:
                 neighbors.append(i)
         return neighbors
 
-# Przykład użycia
 if __name__ == "__main__":
-     #Generowanie przykładowych danych (2D)
     from sklearn.datasets import make_blobs
     import matplotlib.pyplot as plt
+
+    #Przykładowy zbiór testowy z sklearn.dataset
     X, _ = make_blobs(n_samples=100, centers=3, random_state=42)
 
+    #Tutaj sobie klasteryzujemy
+    dbscan = DBSCAN(eps=2, min_pts=5) # tutaj podajemy parametry eps i min_pts
+    dbscan.clusterize(X)
 
-    # Algorytm DBSCAN
-    dbscan = DBSCAN(eps=0.5, min_samples=5)
-    dbscan.fit(X)
-
-    # Wizualizacja klastrów
+    # wizualizacja klastrów
     plt.scatter(X[:, 0], X[:, 1], c=dbscan.labels_)
-    plt.title("DBSCAN clustering")
+    plt.title("Klasteryzacja DBSCAN")
     plt.show()
