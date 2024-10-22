@@ -65,3 +65,10 @@ if __name__ == "__main__":
     plt.scatter(X[:, 0], X[:, 1], c=dbscan.labels_)
     plt.title("Klasteryzacja DBSCAN")
     plt.show()
+
+#porównać z dbscanem z biblioteki
+#unit testy
+#mnist – zbiórt danych
+#porównać z K-means (scikit learn)
+#podzielić kod: test, główna klasa
+#github - manual, wizualizacja
