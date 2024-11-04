@@ -1,6 +1,6 @@
 import numpy as np
 
-class DBSCAN:
+class MySCAN:
     def __init__(self, eps, min_pts):
         self.eps = eps  # maksymalny promień sąsiedztwa
         self.min_pts = min_pts  # minimalna liczba obiektów wchodząca w skład klastra
