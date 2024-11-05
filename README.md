@@ -3,7 +3,7 @@ eps – the maximum distance between two samples for one to be considered as in 
 min_pts – The number of samples in a neighborhood for a point to be considered as a core point
 
 MySCAN can be used to perform DBSCAN clustering on a given dataset  
-To do that use MySCAN.clusterize(X) where X is the given dataset
+To do that, use MySCAN.clusterize(X) where X is the given dataset
 
 Example of using MySCAN with visualisation of the clusters is in main.py
 
