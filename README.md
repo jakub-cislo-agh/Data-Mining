@@ -1,5 +1,7 @@
-MySCAN.py contains a custom built MySCAN(eps, min_pts) class \n
+MySCAN.py contains a custom built MySCAN(eps, min_pts) class
+
 eps – the maximum distance between two samples for one to be considered as in the neighborhood of the other
+
 min_pts – The number of samples in a neighborhood for a point to be considered as a core point
 
 MySCAN can be used to perform DBSCAN clustering on a given dataset
