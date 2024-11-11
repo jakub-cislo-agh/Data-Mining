@@ -1,6 +1,7 @@
 from MySCAN import *
 from sklearn.cluster import DBSCAN
 from sklearn.datasets import make_blobs
+from sklearn.metrics import adjusted_rand_score
 import matplotlib.pyplot as plt
 
 # przykładowy zbiór testowy z sklearn.dataset
@@ -15,6 +16,9 @@ dbscan_lib = DBSCAN(eps = 1, min_samples=5).fit(X)
 
 #tworzymy dwa wykresy
 fig, ax = plt.subplots(nrows=1, ncols=2)
+
+rating = adjusted_rand_score(dbscan.labels_, dbscan_lib.labels_)
+print(rating)
 
 ax[0].scatter(X[:, 0], X[:, 1], c=dbscan.labels_)
 ax[0].set_title("Klasteryzacja DBSCAN")
