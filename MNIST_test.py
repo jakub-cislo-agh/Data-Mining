@@ -44,8 +44,8 @@ unique_labels = np.unique(dbscan.labels_)
 n_clusters = len(unique_labels) - (1 if -1 in unique_labels else 0)
 n_noise = list(dbscan.labels_).count(-1)
 
-print(f"Liczba wykrytych klastrów: {n_clusters}")
-print(f"Liczba punktów oznaczonych jako szum: {n_noise}")
+print(f"Liczba wykrytych klastrów: {n_clusters}") # clusters_n = 10
+print(f"Liczba punktów oznaczonych jako szum: {n_noise}") # noise_n = 349
 
 # Ewaluacja klasteryzacji
 ari = adjusted_rand_score(Y_data, dbscan.labels_)
